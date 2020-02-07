@@ -4,6 +4,7 @@ from django.db.models import Q
 from .models import Tweet
 from .forms import TweetModelForm
 from .mixins import FormUserMixins,UserOwnerMixin
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
@@ -31,7 +32,7 @@ class TweetDetailView(DetailView):
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        return Tweet.objects.get(id=pk)
+        return Tweet.objects.get(id=pk)        
 
 class TweetListView(ListView):
     template_name = 'tweet/list_view.html'

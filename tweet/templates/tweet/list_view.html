@@ -1,14 +1,40 @@
-{% include 'tweet/search_form.html' %}
-{% for object in object_list %}
-    </br>
-    {{ object.user }}</br>
-    {{ object.content }}</br>
-    {{ object.timestamp }}</br>
-    </br>
-{% empty %}
-        {% if request.GET.q %}
-             <p>NO Tweets Found</p> 
-        {% else %}
-             <p>NO Tweets Yet</p>
-        {% endif %}
-{% endfor %}
+{% extends 'base.html'%}
+{% block title %}{{ block.super }}
+   List View
+{% endblock %}
+
+{% block content %}
+     <div class="row">
+          <div class="col-sm-8">
+               {% for object in object_list %}
+               </br>
+               <div class="media">
+                    {% if object.image %}
+                         <img class="mr-3" src="...">
+                    {% else %}     
+                         <div class="media-body">
+                              <div class="row">
+                                   <div class="col-sm-3" style="background-color: skyblue;">
+                                        <h1>{{ object.user }}</br></h1>
+                                   </div>
+                                   <div class="col-sm-9">
+                                        {{ object.content }}</br>
+                                        {{ object.timestamp }}</br>
+                                   </div>  
+                              </div>  
+                         </div>   
+                    {% endif %}       
+               </div>
+               <hr/>
+               </br>
+               {% empty %}
+                    {% if request.GET.q %}
+                         <p>NO Tweets Found</p> 
+                    {% else %}
+                         <p>NO Tweets Yet</p>
+                    {% endif %}
+               {% endfor %}
+          </div>
+     </div>
+     
+{% endblock %}

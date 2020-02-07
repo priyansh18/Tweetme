@@ -1,1 +1,8 @@
-{% include 'tweet/form.html' with form=form btn_title='Tweet'%}
+{% extends 'base.html'%}
+{% block title %}{{ block.super }}
+   Create view
+{% endblock %}
+
+{% block content %}
+    {% include 'tweet/form.html' with form=form btn_title='Tweet'%}
+{% endblock %}

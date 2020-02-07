@@ -1,4 +1,5 @@
-<form method="GET" action="{% url 'list' %}">
-    <input type="text" placeholder='Search' name='q' value='{{request.get.q}}''>
-    <button type="submit">Search</button>
+
+<form class="form-inline md-form mr-auto mb-4" method="GET" action="{% url 'list' %}">
+    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name='q' value='{{request.get.q}}'>
+    <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
 </form>

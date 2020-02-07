@@ -1,8 +1,14 @@
+{% extends 'base.html'%}
+{% block title %}{{ block.super }}
+   Delete View
+{% endblock %}
 
-<form class="form" method="POST" action="">
-    {% csrf_token %}
-    {{form.as_p }}
-    <p>Are you sure you want to delete {{ object }} ?</p>
-    <input type="submit" value="Delete">
+{% block content %}
+    <form class="form" method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p }}
+        <p>Are you sure you want to delete {{ object }} ?</p>
+        <input type="submit" value="Delete">
 
-</form>
+    </form>
+{% endblock %}

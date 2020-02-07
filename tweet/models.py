@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.urls import reverse
 
 # Create your models here.
 class Tweet(models.Model):
@@ -14,7 +15,7 @@ class Tweet(models.Model):
 
     def clean(self,*args,**kwargs):
         content = self.content
-        if content == 'aa' :
+        if content == 'any' :
             raise ValidationError('cannot be null')
         else:
             return super(Tweet,self).clean(*args,**kwargs)
