@@ -49,6 +49,12 @@ class TweetListView(ListView):
                            )
         return qs
 
+    def get_context_data(self,*args,**kwargs):
+        context = super(TweetListView,self).get_context_data(*args,**kwargs)
+        context['create_form'] = TweetModelForm()
+        context['create_url'] = 'tweet/create/'
+        return context
+
 
 # def tweet_detail_view(request,id=1):
 #     obj = Tweet.objects.get(id=id)
