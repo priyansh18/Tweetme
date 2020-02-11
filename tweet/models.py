@@ -6,7 +6,7 @@ from django.urls import reverse
 # Create your models here.
 class Tweet(models.Model):
     user        =      models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=None )
-    content      =     models.TextField(max_length=100)
+    content      =     models.CharField(max_length=350)
     updated    =       models.DateTimeField(auto_now=True)
     timestamp    =     models.DateTimeField(auto_now_add=True)
 

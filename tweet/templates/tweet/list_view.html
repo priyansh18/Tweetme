@@ -2,16 +2,36 @@
 {% block title %}{{ block.super }}
    List View
 {% endblock %}
+{% block script %}
+<script>
+     $(document).ready(function(){
+          console.log("working");
+     });
+     $.ajax({
+          url:'/api/tweet/',
+          method:'GET'
+          success : function(data){
+             $.each(data,function(key,value){
+               console.log(key)
+               console.log(value.user)
+
+             })
+          }
+
+
+     })
+</script>     
+{% endblock %}
 
 {% block content %}
-     <!-- <div class="row">
+     <div class="row">
           {% if not request.GET.q %}
           <div class="col-sm-9">
                {% include 'tweet/form.html' with form=create_form action_url=create_url btn_title='TWEET' %}
           </div>
           {% endif %}
           
-     </div> -->
+     </div>
      
      <div class="row">
           <div class="col-sm-8">
