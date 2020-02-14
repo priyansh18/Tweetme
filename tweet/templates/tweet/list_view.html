@@ -4,30 +4,65 @@
 {% endblock %}
 {% block script %}
 <script>
-     $(document).ready(function(){
-          console.log("working");
-     });
+$(document).ready(function(){
+     console.log("working");
      $.ajax({
-          url:'/api/tweet/',
-          method:'GET'
+          url:'/tweet/api/',
+          method:'GET',
           success : function(data){
              $.each(data,function(key,value){
-               console.log(key)
-               console.log(value.user)
-
+               // console.log(key)
+               // console.log(value.user)
+               // console.log(value.content)
              })
           }
-
-
      })
+
+     var charsStart = 140;
+     var charsCurrent = 0;
+
+
+     $('#chars').prepend("<span id='tweetcharsleft'>" + "No. of characters left :" +  charsStart + "</br>" + "</span>")
+
+     $('#chars textarea').keyup(function(event){
+          var tweetvalue = $(this).val()
+          charsCurrent = charsStart - tweetvalue.length 
+          console.log(charsCurrent)
+          var spanChars = $('#tweetcharsleft')
+          $('#tweetcharsleft').text(charsCurrent)
+
+          if(charsCurrent > 0 ){
+               spanChars.removeClass('grey-color')
+               spanChars.removeClass('red-color')
+               
+               $('#disableme').prop('disabled', false)
+               
+          } else if(charsCurrent == 0){
+               spanChars.removeClass('red-color')
+               spanChars.addClass('grey-color')
+               $('#disableme').prop('disabled', false)
+               
+               
+          }else{
+               spanChars.removeClass('grey-color')
+               spanChars.addClass('red-color')
+               $('#disableme').prop('disabled', true)
+          }
+     })
+
+     
+});   
 </script>     
 {% endblock %}
 
 {% block content %}
+     
      <div class="row">
           {% if not request.GET.q %}
-          <div class="col-sm-9">
+          <div class="col-sm-9" id="chars">
+
                {% include 'tweet/form.html' with form=create_form action_url=create_url btn_title='TWEET' %}
+
           </div>
           {% endif %}
           
@@ -36,21 +71,25 @@
      <div class="row">
           <div class="col-sm-8">
                {% for object in object_list %}
+
                </br>
                <div class="media">
                     {% if object.image %}
                          <img class="mr-3" src="...">
                     {% else %}     
                          <div class="media-body">
-                              <div class="row">
-                                   <div class="col-sm-3" style="background-color: skyblue;">
-                                        <h1>{{ object.user }}</br></h1>
-                                   </div>
-                                   <div class="col-sm-9">
-                                        {{ object.content }}</br>
-                                        {{ object.timestamp }}</br>
+                              <div>
+                                   <div class="row">
+                                        <div class="col-sm-3" style="background-color: skyblue;">
+                                             <h1>{{ object.user }}</br></h1>
+                                        </div>
+                                        <div class="col-sm-9">
+                                             {{ object.content }}</br>
+                                             {{ object.timestamp }}</br>
+                                        </div>  
                                    </div>  
-                              </div>  
+                              </div>
+                              
                          </div>   
                     {% endif %}       
                </div>
