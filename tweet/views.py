@@ -6,6 +6,7 @@ from .forms import TweetModelForm
 from .mixins import FormUserMixins,UserOwnerMixin
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 class TweetCreateView(LoginRequiredMixin,FormUserMixins,CreateView):
@@ -36,7 +37,7 @@ class TweetDetailView(DetailView):
 
 class TweetListView(ListView):
     template_name = 'tweet/list_view.html'
-         
+      
     def get_queryset(self,*args,**kwargs):
         qs = Tweet.objects.all()
         query = self.request.GET.get('q', None)

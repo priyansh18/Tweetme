@@ -4,6 +4,7 @@ from tweet.models import Tweet
 from accounts.api.serializer import UserDispalySerializer
 
 class TweetModelSerializer(serializers.ModelSerializer):
+    
     user = UserDispalySerializer()
     class Meta:
         model = Tweet

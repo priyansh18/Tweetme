@@ -20,4 +20,7 @@ class Tweet(models.Model):
         else:
             return super(Tweet,self).clean(*args,**kwargs)
 
+    class Meta:
+        ordering = ['timestamp']        
+
 

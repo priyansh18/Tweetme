@@ -17,8 +17,13 @@ $(document).ready(function(){
              })
           }
      })
+$(document).ready(function(){
+     function attachTweet(tweetvalue,append){
+          $('#use').append(tweetvalue.user)
+     }
+})     
 
-     var charsStart = 140;
+     var charsStart = 120;
      var charsCurrent = 0;
 
 
@@ -83,11 +88,12 @@ $(document).ready(function(){
                                         <div class="col-sm-3" style="background-color: skyblue;">
                                              <h1>{{ object.user }}</br></h1>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9 use ">
                                              {{ object.content }}</br>
                                              {{ object.timestamp }}</br>
+                                             
                                         </div>  
-                                   </div>  
+                                   </div> 
                               </div>
                               
                          </div>   
@@ -104,5 +110,7 @@ $(document).ready(function(){
                {% endfor %}
           </div>
      </div>
+
+     
      
 {% endblock %}
