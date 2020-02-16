@@ -17,12 +17,6 @@ $(document).ready(function(){
              })
           }
      })
-$(document).ready(function(){
-     function attachTweet(tweetvalue,append){
-          $('#use').append(tweetvalue.user)
-     }
-})     
-
      var charsStart = 120;
      var charsCurrent = 0;
 
@@ -89,8 +83,10 @@ $(document).ready(function(){
                                              <h1>{{ object.user }}</br></h1>
                                         </div>
                                         <div class="col-sm-9 use ">
+                                             
                                              {{ object.content }}</br>
                                              {{ object.timestamp }}</br>
+                                             <h6>Via <a href="/accounts/{{object.user}}">{{ object.user }}</a></h3>
                                              
                                         </div>  
                                    </div> 

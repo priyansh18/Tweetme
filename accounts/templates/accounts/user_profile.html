@@ -4,14 +4,34 @@
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-sm-3 col-xs-12" style="background-color: rgb(155, 235, 135); height: 50px ;">
+        <div class="col-sm-4 col-xs-12" style="background-color: rgb(155, 235, 135); height: 50px ;">
+
             <h1>{{ object.username }}</br></h1>
+            <p><a class="btn btn-link" href='{% url 'accounts:follow' username=object.username %}'>{% if following %}UnFollow{% else %}Follow{% endif %}</a></p></br></p>
         </div>
-        <div class="col-sm-9 col-xs-12">
-            <h1>Tweets</h1>
-            {% for tweets in object.tweet_set.all %}
-                {{ tweets }} </br>
+        <div class=col-sm-4>
+            <h2>Following <small>({{ object.profile.get_following.count }})</small></h2>
+            {% for user in object.profile.get_following %}
+            <a href="/accounts/{{user.username}}">{{ user.username }} </a></br>
+            {% empty %}    
+            <h6>Not following any users</h6>
             {% endfor %}
         </div>
+        <div class="col-sm-4">
+            <h2>Followed By</h2>
+            {% for profile in object.followed_by.all %}
+            <a href="/accounts/{{ profile.user.username}}">{{ profile.user.username }} </a></br>
+            {% empty %}    
+            <h6>Not followed by any users</h6>
+            {% endfor %}
+        </div>
+        <div class="col-sm-8">
+            <hr>
+            <h1><i><b>Tweets</b></i></h1></br>
+            {% for tweets in object.tweet_set.all %}
+                <li>{{ tweets }} </br></li>
+            <hr>
+            {% endfor %}
+        </div> 
     </div>
 {% endblock %}
