@@ -17,6 +17,17 @@ $(document).ready(function(){
              })
           }
      })
+
+     function updateHashLinks(){
+          $(".media-body").each(function(data){
+               var hashTagsRegex = /(^|\s)#([\w\d-]+)/g
+               var newText = $(this).html().replace(hashTagsRegex,"$1<a href='/tags/$2/'>#$2</a>")
+               $(this).html(newText)
+          })
+     }
+
+     $(".media-body").append(updateHashLinks())
+
      var charsStart = 120;
      var charsCurrent = 0;
 
@@ -47,9 +58,7 @@ $(document).ready(function(){
                spanChars.addClass('red-color')
                $('#disableme').prop('disabled', true)
           }
-     })
-
-     
+     })     
 });   
 </script>     
 {% endblock %}
@@ -82,8 +91,7 @@ $(document).ready(function(){
                                         <div class="col-sm-3" style="background-color: skyblue;">
                                              <h1>{{ object.user }}</br></h1>
                                         </div>
-                                        <div class="col-sm-9 use ">
-                                             
+                                        <div class="col-sm-9 media-body ">
                                              {{ object.content }}</br>
                                              {{ object.timestamp }}</br>
                                              <h6>Via <a href="/accounts/{{object.user}}">{{ object.user }}</a></h3>
