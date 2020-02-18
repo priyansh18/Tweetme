@@ -5,6 +5,7 @@ from .models import Tweet
 from .forms import TweetModelForm
 from .mixins import FormUserMixins,UserOwnerMixin
 from django.urls import reverse
+from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
@@ -33,7 +34,16 @@ class TweetDetailView(DetailView):
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        return Tweet.objects.get(id=pk)        
+        return Tweet.objects.get(id=pk)      
+
+# class LikeToggleView(View):
+#     def get(self,request,pk,format=None):
+#         tweet_qs = Tweet.objects.filter(pk=pk)
+#         message = 'Not Allowed'
+#         if request.user.is_authenticated:
+#             is_liked = Tweet.objects.like_toggle(request.user,tweet_qs.first())
+#             return ({"liked " : is_liked})
+#         return render({"message" : message},status=400)             
 
 class TweetListView(ListView):
     template_name = 'tweet/list_view.html'

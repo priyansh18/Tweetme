@@ -18,10 +18,33 @@ $(document).ready(function(){
           }
      })
 
+     // $(document.body).on("click",".tweet-like",function(e){
+     //      e.preventDefault()
+     //      var this_ = $(this)
+     //      var tweetId = this_.attr("data-id")
+     //      var likedUrl = '/tweet' + tweetId + '/like/'
+     //      $.ajax({
+     //           method : 'GET',
+     //           url : likedUrl,
+     //           success : function(data){
+     //                if (data.liked){
+     //                     this_.text("Liked")
+     //                }else{
+     //                     this_.text("UnLiked")
+     //                }
+     //           }
+     //      })
+          
+     // })
+
      function updateHashLinks(){
           $(".media-body").each(function(data){
                var hashTagsRegex = /(^|\s)#([\w\d-]+)/g
-               var newText = $(this).html().replace(hashTagsRegex,"$1<a href='/tags/$2/'>#$2</a>")
+               var userTagsRegex = /(^|\s)@([\w\d-]+)/g
+               var currentHtml  =  $(this).html()
+               var newText;
+               newText = currentHtml.replace(hashTagsRegex,"$1<a href='/tags/$2/'>#$2</a>")
+               newText = newText.replace(userTagsRegex,"$1<a href='/$2/'>@$2</a>")
                $(this).html(newText)
           })
      }
@@ -32,19 +55,18 @@ $(document).ready(function(){
      var charsCurrent = 0;
 
 
-     $('#chars').prepend("<span id='tweetcharsleft'>" + "No. of characters left :" +  charsStart + "</br>" + "</span>")
+     $('#chars').prepend("<span id='tweetcharsleft'>" + "No. of characters left:" +  charsStart + "</br>"  + "</br>" + "</span>")
 
      $('#chars textarea').keyup(function(event){
           var tweetvalue = $(this).val()
           charsCurrent = charsStart - tweetvalue.length 
           console.log(charsCurrent)
           var spanChars = $('#tweetcharsleft')
-          $('#tweetcharsleft').text(charsCurrent)
+          $('#tweetcharsleft').text("No. of characters left :  " + charsCurrent)
 
           if(charsCurrent > 0 ){
                spanChars.removeClass('grey-color')
                spanChars.removeClass('red-color')
-               
                $('#disableme').prop('disabled', false)
                
           } else if(charsCurrent == 0){
@@ -71,6 +93,7 @@ $(document).ready(function(){
 
                {% include 'tweet/form.html' with form=create_form action_url=create_url btn_title='TWEET' %}
 
+
           </div>
           {% endif %}
           
@@ -88,13 +111,16 @@ $(document).ready(function(){
                          <div class="media-body">
                               <div>
                                    <div class="row">
-                                        <div class="col-sm-3" style="background-color: skyblue;">
-                                             <h1>{{ object.user }}</br></h1>
+                                        <div class="col-sm-3" >
+                                             <h1 style="background-color: skyblue;">{{ object.user }}</br></h1>
                                         </div>
                                         <div class="col-sm-9 media-body ">
                                              {{ object.content }}</br>
                                              {{ object.timestamp }}</br>
                                              <h6>Via <a href="/accounts/{{object.user}}">{{ object.user }}</a></h3>
+                                             <!-- <button type="button" class="btn tweet-like" data-id="{{ object.id }}">Like</button>     -->
+                                             <button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/update">Edit</a></button>
+                                             <button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/delete">Delete</a></button>
                                              
                                         </div>  
                                    </div> 

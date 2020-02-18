@@ -2,5 +2,5 @@
 <form  class="form" method="POST" action="{% if action_url %}{{ action_url}} {% endif %}">
     {% csrf_token %}
     {{form | crispy }}
-    <input id="disableme" type="submit" value="{{ btn_title }}" disabled="false">
+    <input id="disableme" type="submit" value="{{ btn_title }}">
 </form>
