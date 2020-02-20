@@ -5,142 +5,147 @@
 {% block script %}
 <script>
 $(document).ready(function(){
-     console.log("working");
-     $.ajax({
-          url:'/tweet/api/',
-          method:'GET',
-          success : function(data){
-             $.each(data,function(key,value){
-               // console.log(key)
-               // console.log(value.user)
-               // console.log(value.content)
-             })
-          }
-     })
-
-     // $(document.body).on("click",".tweet-like",function(e){
-     //      e.preventDefault()
-     //      var this_ = $(this)
-     //      var tweetId = this_.attr("data-id")
-     //      var likedUrl = '/tweet' + tweetId + '/like/'
-     //      $.ajax({
-     //           method : 'GET',
-     //           url : likedUrl,
-     //           success : function(data){
-     //                if (data.liked){
-     //                     this_.text("Liked")
-     //                }else{
-     //                     this_.text("UnLiked")
-     //                }
-     //           }
-     //      })
-          
-     // })
-
-     function updateHashLinks(){
-          $(".media-body").each(function(data){
-               var hashTagsRegex = /(^|\s)#([\w\d-]+)/g
-               var userTagsRegex = /(^|\s)@([\w\d-]+)/g
-               var currentHtml  =  $(this).html()
-               var newText;
-               newText = currentHtml.replace(hashTagsRegex,"$1<a href='/tags/$2/'>#$2</a>")
-               newText = newText.replace(userTagsRegex,"$1<a href='/$2/'>@$2</a>")
-               $(this).html(newText)
-          })
-     }
-
-     $(".media-body").append(updateHashLinks())
-
-     var charsStart = 120;
-     var charsCurrent = 0;
+	console.log("working");
+	$.ajax({
+		url:'/tweet/api/',
+		method:'GET',
+		success : function(data){
+		   $.each(data,function(key,value){
+			// console.log(key)
+			// console.log(value.user)
+			// console.log(value.content)
+		   })
+		}
+	})
 
 
-     $('#chars').prepend("<span id='tweetcharsleft'>" + "No. of characters left:" +  charsStart + "</br>"  + "</br>" + "</span>")
+	$(document.body).on("click",".tweet-like",function(e){
+		e.preventDefault()
+		var this_ = $(this)
+		var tweetId = this_.attr("data-id")
+		var likedUrl = '/tweet/' + tweetId + '/like/'
+		$.ajax({
+			method : 'GET',
+			url : likedUrl,
+			success : function(data){
+				if (data.liked) {
+					this_.text("Like")
+				}else{
+					this_.text("UnLike")
+				}
+			},
+			error : function(data){
+				console.log("error")
+				console.log(data)
+			}
+		})
+		
+	})
 
-     $('#chars textarea').keyup(function(event){
-          var tweetvalue = $(this).val()
-          charsCurrent = charsStart - tweetvalue.length 
-          console.log(charsCurrent)
-          var spanChars = $('#tweetcharsleft')
-          $('#tweetcharsleft').text("No. of characters left :  " + charsCurrent)
+	function updateHashLinks(){
+		$(".media-body").each(function(data){
+			var hashTagsRegex = /(^|\s)#([\w\d-]+)/g
+			var userTagsRegex = /(^|\s)@([\w\d-]+)/g
+			var currentHtml  =  $(this).html()
+			var newText;
+			newText = currentHtml.replace(hashTagsRegex,"$1<a href='/tags/$2/'>#$2</a>")
+			newText = newText.replace(userTagsRegex,"$1<a href='/$2/'>@$2</a>")
+			$(this).html(newText)
+		})
+	}
 
-          if(charsCurrent > 0 ){
-               spanChars.removeClass('grey-color')
-               spanChars.removeClass('red-color')
-               $('#disableme').prop('disabled', false)
-               
-          } else if(charsCurrent == 0){
-               spanChars.removeClass('red-color')
-               spanChars.addClass('grey-color')
-               $('#disableme').prop('disabled', false)
-               
-               
-          }else{
-               spanChars.removeClass('grey-color')
-               spanChars.addClass('red-color')
-               $('#disableme').prop('disabled', true)
-          }
-     })     
+	$(".media-body").append(updateHashLinks())
+
+	var charsStart = 120;
+	var charsCurrent = 0;
+
+
+	$('#chars').prepend("<span id='tweetcharsleft'>" + "No. of characters left:" +  charsStart + "</br>"  + "</br>" + "</span>")
+
+	$('#chars textarea').keyup(function(event){
+		var tweetvalue = $(this).val()
+		charsCurrent = charsStart - tweetvalue.length 
+		console.log(charsCurrent)
+		var spanChars = $('#tweetcharsleft')
+		$('#tweetcharsleft').text("No. of characters left :  " + charsCurrent)
+
+		if(charsCurrent > 0 ){
+			spanChars.removeClass('grey-color')
+			spanChars.removeClass('red-color')
+			$('#disableme').prop('disabled', false)
+			
+		} else if(charsCurrent == 0){
+			spanChars.removeClass('red-color')
+			spanChars.addClass('grey-color')
+			$('#disableme').prop('disabled', false)
+			
+			
+		}else{
+			spanChars.removeClass('grey-color')
+			spanChars.addClass('red-color')
+			$('#disableme').prop('disabled', true)
+		}
+	})     
 });   
 </script>     
 {% endblock %}
 
 {% block content %}
-     
-     <div class="row">
-          {% if not request.GET.q %}
-          <div class="col-sm-9" id="chars">
+	
+	<div class="row">
+		{% if not request.GET.q %}
+		<div class="col-sm-9" id="chars">
 
-               {% include 'tweet/form.html' with form=create_form action_url=create_url btn_title='TWEET' %}
+			{% include 'tweet/form.html' with form=create_form action_url=create_url btn_title='TWEET' %}
 
 
-          </div>
-          {% endif %}
-          
-     </div>
-     
-     <div class="row">
-          <div class="col-sm-8">
-               {% for object in object_list %}
+		</div>
+		{% endif %}
+		
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-8">
+			{% for object in object_list %}
 
-               </br>
-               <div class="media">
-                    {% if object.image %}
-                         <img class="mr-3" src="...">
-                    {% else %}     
-                         <div class="media-body">
-                              <div>
-                                   <div class="row">
-                                        <div class="col-sm-3" >
-                                             <h1 style="background-color: skyblue;">{{ object.user }}</br></h1>
-                                        </div>
-                                        <div class="col-sm-9 media-body ">
-                                             {{ object.content }}</br>
-                                             {{ object.timestamp }}</br>
-                                             <h6>Via <a href="/accounts/{{object.user}}">{{ object.user }}</a></h3>
-                                             <!-- <button type="button" class="btn tweet-like" data-id="{{ object.id }}">Like</button>     -->
-                                             <button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/update">Edit</a></button>
-                                             <button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/delete">Delete</a></button>
-                                             
-                                        </div>  
-                                   </div> 
-                              </div>
-                              
-                         </div>   
-                    {% endif %}       
-               </div>
-               <hr/>
-               </br>
-               {% empty %}
-                    {% if request.GET.q %}
-                         <p>NO Tweets Found</p> 
-                    {% else %}
-                         <p>NO Tweets Yet</p>
-                    {% endif %}
-               {% endfor %}
-          </div>
-     </div>
+			</br>
+			<div class="media">
+				{% if object.image %}
+					<img class="mr-3" src="...">
+				{% else %}     
+					<div class="media-body">
+						<div>
+							<div class="row">
+								<div class="col-sm-3" >
+									<h1 style="background-color: skyblue;">{{ object.user }}</br></h1>
+								</div>
+								<div class="col-sm-9 media-body ">
+									{{ object.content }}</br>
+									{{ object.timestamp }}</br>
+									<h6>Via <a href="/accounts/{{object.user}}">{{ object.user }}</a></h3>
+									<a href="#" class="btn tweet-like" data-id="{{ object.id }}">Like</a> 
+									<button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/update">Edit</a></button>
+									<button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/delete">Delete</a></button>
+									
+								</div>  
+							</div> 
+						</div>
+						
+					</div>   
+				{% endif %}       
+			</div>
+			<hr/>
+			</br>
+			{% empty %}
+				{% if request.GET.q %}
+					<p>NO Tweets Found</p> 
+				{% else %}
+					<p>NO Tweets Yet</p>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
 
-     
-     
+	
+	
 {% endblock %}

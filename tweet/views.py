@@ -36,15 +36,7 @@ class TweetDetailView(DetailView):
         pk = self.kwargs.get('pk')
         return Tweet.objects.get(id=pk)      
 
-# class LikeToggleView(View):
-#     def get(self,request,pk,format=None):
-#         tweet_qs = Tweet.objects.filter(pk=pk)
-#         message = 'Not Allowed'
-#         if request.user.is_authenticated:
-#             is_liked = Tweet.objects.like_toggle(request.user,tweet_qs.first())
-#             return ({"liked " : is_liked})
-#         return render({"message" : message},status=400)             
-
+           
 class TweetListView(ListView):
     template_name = 'tweet/list_view.html'
       
