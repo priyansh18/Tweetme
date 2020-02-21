@@ -1,62 +1,66 @@
 from django.shortcuts import render
-from django.views.generic import DetailView,ListView,CreateView,UpdateView,DeleteView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from .models import Tweet
 from .forms import TweetModelForm
-from .mixins import FormUserMixins,UserOwnerMixin
+from .mixins import FormUserMixins, UserOwnerMixin
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
-class TweetCreateView(LoginRequiredMixin,FormUserMixins,CreateView):
+
+class TweetCreateView(LoginRequiredMixin, FormUserMixins, CreateView):
     form_class = TweetModelForm
     template_name = 'tweet/create_view.html'
     success_url = '/tweet/'
-    login_url   = '/admin/'
+    login_url = '/admin/'
 
-class TweetUpdateView(LoginRequiredMixin,UserOwnerMixin,UpdateView):
+
+class TweetUpdateView(LoginRequiredMixin, UserOwnerMixin, UpdateView):
     queryset = Tweet.objects.all()
     form_class = TweetModelForm
     template_name = 'tweet/update_view.html'
     success_url = '/tweet/'
 
-class TweetDeleteView(LoginRequiredMixin,UserOwnerMixin,DeleteView):
+
+class TweetDeleteView(LoginRequiredMixin, UserOwnerMixin, DeleteView):
     queryset = Tweet.objects.all()
     form_class = TweetModelForm
     template_name = 'tweet/delete_view.html'
-    success_url = '/tweet/'    
-      
+    success_url = '/tweet/'
+
+
 class TweetDetailView(DetailView):
     template_name = 'tweet/detail_view.html'
     queryset = Tweet.objects.all()
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        return Tweet.objects.get(id=pk)      
+        return Tweet.objects.get(id=pk)
 
-           
-class TweetListView(ListView):
+
+class TweetListView(LoginRequiredMixin, ListView):
     template_name = 'tweet/list_view.html'
-      
-    def get_queryset(self,*args,**kwargs):
+
+    def get_queryset(self, *args, **kwargs):
         im_following = self.request.user.profile.get_following()
-        qs1 = Tweet.objects.filter(user__in = im_following)
-        qs2= Tweet.objects.filter(user= self.request.user)
-        qs = ( qs1 | qs2).distinct()
+        qs1 = Tweet.objects.filter(user__in=im_following)
+        qs2 = Tweet.objects.filter(user=self.request.user)
+        qs = (qs1 | qs2).distinct()
         query = self.request.GET.get('q', None)
         if query is not None:
             qs = qs.filter(
                 Q(content__icontains=query) |
                 Q(user__username__icontains=query)
-                           )
-        # print(qs)     
-        queryset = reversed(Tweet.objects.filter(pk__in = qs))           
+            )
+        # print(qs)
+        queryset = reversed(Tweet.objects.filter(pk__in=qs))
         return queryset
 
-    def get_context_data(self,*args,**kwargs):
-        context = super(TweetListView,self).get_context_data(*args,**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(TweetListView, self).get_context_data(*args, **kwargs)
         context['create_form'] = TweetModelForm()
         context['create_url'] = 'tweet/create/'
         return context
@@ -78,4 +82,4 @@ class TweetListView(ListView):
 #     context = {
 #         'object_list' : queryset
 #     }
-#     return render(request,'tweet/list_view.html',context)    
+#     return render(request,'tweet/list_view.html',context)

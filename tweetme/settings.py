@@ -55,11 +55,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'tweetme.urls'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,7 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tweetme.wsgi.application'
-
 
 
 # Database
@@ -125,9 +127,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static-storage'),
+    os.path.join(BASE_DIR, 'static-storage'),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static-serve')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-serve')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

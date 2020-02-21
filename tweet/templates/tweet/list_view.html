@@ -93,21 +93,16 @@ $(document).ready(function(){
 {% block content %}
 	
 	<div class="row">
-		{% if not request.GET.q %}
-		<div class="col-sm-9" id="chars">
-
+		{% if not request.GET.q %}<hr>	
+		<div class="col-sm-12" id="chars">
 			{% include 'tweet/form.html' with form=create_form action_url=create_url btn_title='TWEET' %}
-
-
 		</div>
 		{% endif %}
-		
 	</div>
-	
 	<div class="row">
 		<div class="col-sm-8">
+			
 			{% for object in object_list %}
-
 			</br>
 			<div class="media">
 				{% if object.image %}
@@ -126,23 +121,24 @@ $(document).ready(function(){
 									<a href="#" class="btn tweet-like" data-id="{{ object.id }}">Like</a> 
 									<button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/update">Edit</a></button>
 									<button type="button" class="btn btn-dark"><a href="/tweet/{{ object.id }}/delete">Delete</a></button>
-									
 								</div>  
 							</div> 
 						</div>
-						
 					</div>   
 				{% endif %}       
 			</div>
-			<hr/>
-			</br>
-			{% empty %}
+			<div>
+				{% empty %}
 				{% if request.GET.q %}
 					<p>NO Tweets Found</p> 
 				{% else %}
 					<p>NO Tweets Yet</p>
 				{% endif %}
-			{% endfor %}
+				{% endfor %}
+			</div>
+			<hr/>
+			</br>
+			
 		</div>
 	</div>
 

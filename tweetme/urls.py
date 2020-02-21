@@ -22,16 +22,20 @@ from django.conf.urls.static import static
 from .views import home
 from hashtag.views import HashTagView
 from tweet.views import TweetListView
+from accounts.views import UserRegistrationView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$',TweetListView.as_view(),name='home'),
-    url(r'^tweet/',include('tweet.urls')),
+    url(r'^$', TweetListView.as_view(), name='home'),
+    url(r'^register/$', UserRegistrationView.as_view(), name='register'),
+    url(r'^tweet/', include('tweet.urls')),
     url(r'^tags/', include(('hashtag.urls', 'hashtag'), namespace='hashtag')),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
-    url(r'^tweet/api/',include('tweet.api.urls')),
-    
+    url(r'^tweet/api/', include('tweet.api.urls')),
+
 ]
 
 if settings.DEBUG:
-    urlpatterns += (static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
+    urlpatterns += (static(settings.STATIC_URL,
+                           document_root=settings.STATIC_ROOT))
